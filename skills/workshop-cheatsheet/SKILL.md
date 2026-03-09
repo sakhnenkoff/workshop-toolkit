@@ -58,9 +58,8 @@ If a `CLAUDE.md` exists, add/update the cheatsheet entry in the file map. If not
 ### Step 4: Deliver
 
 1. Write the file to the same directory as the `workshop.md`, named `cheatsheet.html`
-2. Delete the legacy `overview.html` if it exists in the same directory (ask user first)
-3. Open it in the browser: `open cheatsheet.html`
-4. Tell the user about keyboard shortcuts
+2. Open it in the browser: `open cheatsheet.html`
+3. Tell the user about keyboard shortcuts
 
 ## Keyboard Shortcuts
 
