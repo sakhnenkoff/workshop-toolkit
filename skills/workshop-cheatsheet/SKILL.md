@@ -35,6 +35,10 @@ Read the `workshop.md` and extract:
   - Risk mitigations relevant to this block (from the Risk Mitigation table)
   - Fallback notes (lines containing "If it fails" or "backup" or "fallback")
 
+### Step 1.5: Read context
+
+Check for a `CLAUDE.md` in the repo root. If it exists, use the design system info (colors, fonts, component patterns) to style the cheatsheet consistently with the slides. The cheatsheet should feel like it belongs to the same visual family — same fonts and accent colors — but with a light, utility-focused design.
+
 ### Step 2: Generate
 
 Produce a single `cheatsheet.html` file. Read the companion `cheatsheet-template.md` for the full HTML/CSS/JS specification.
@@ -47,11 +51,16 @@ Produce a single `cheatsheet.html` file. Read the companion `cheatsheet-template
 - Clean, light design — this is a tool, not a presentation
 - Each block shows: timing, speaker notes, poll text, demo steps, transition cue, fallback
 
-### Step 3: Deliver
+### Step 3: Update CLAUDE.md
+
+If a `CLAUDE.md` exists, add/update the cheatsheet entry in the file map. If not, create a basic one with project info and file references.
+
+### Step 4: Deliver
 
 1. Write the file to the same directory as the `workshop.md`, named `cheatsheet.html`
-2. Open it in the browser: `open cheatsheet.html`
-3. Tell the user about keyboard shortcuts
+2. Delete the legacy `overview.html` if it exists in the same directory (ask user first)
+3. Open it in the browser: `open cheatsheet.html`
+4. Tell the user about keyboard shortcuts
 
 ## Keyboard Shortcuts
 

@@ -41,11 +41,23 @@ Read the `workshop.md` and extract **participant-facing content only**:
 
 ### Phase 2: Style Selection
 
-Generate **3 single-slide HTML preview files** showing different visual styles applied to the title slide. Save them as `preview-1.html`, `preview-2.html`, `preview-3.html` in the same directory.
+**Check for existing design context first:**
+- If a `CLAUDE.md` exists with design system info (colors, fonts, tokens), use those as the starting point
+- If the user specifies a brand (e.g., "use Warp/Vend tokens"), fetch tokens from the relevant source (npm, GitHub, or companion files)
+- If neither, use the curated presets below
+
+**Brand preset flow** (when user specifies a design system):
+1. Look up the brand's color tokens, typography, and component conventions
+2. Generate a single preview using the brand's actual tokens
+3. Ask: "I've matched your brand tokens. Want to adjust anything?"
+4. Proceed to generation with the brand palette
+
+**Generic preset flow** (when no brand is specified):
+Generate **3 single-slide HTML preview files** showing different visual styles. Save as `preview-1.html`, `preview-2.html`, `preview-3.html`.
 
 Open all three in the browser and ask: "Which style do you prefer? Or pick elements from multiple."
 
-**Available style directions** (adapt from these, don't use verbatim):
+**Available style directions** (adapt, don't use verbatim):
 
 1. **Clean Dark** — Dark background, green/blue accent, monospace numbers, subtle grid texture. Professional tech feel.
 2. **Swiss Light** — White background, bold sans-serif, red accent, strong grid, Bauhaus-inspired. Clean and precise.
@@ -66,10 +78,15 @@ Produce a single `slides.html` file with the selected style. Follow the companio
 | **Agenda** | Timeline bar + block list with timing | Second slide |
 | **Section opener** | Block name, large, with timing badge | Before each content section |
 | **Content** | Key points from the block (4-6 max per slide) | Within sections |
+| **Split layout** | Heading + explanation left, visual element right | For architecture, diagrams, code previews |
+| **Code preview** | Faux editor window showing actual file content | When showing config files, skill files, code |
+| **Before/after** | Side-by-side comparison cards | When contrasting two states (e.g., with/without context) |
 | **Poll prompt** | Just the question, large and centered, with format indicator | When a poll occurs |
-| **Demo title** | Demo name + what will be shown | Before demo sections |
-| **Key insight** | Single impactful statement, large text, accent color | For "key takeaway" moments |
-| **Action / CTA** | Next steps, links, calls to action | Closing slides |
+| **Demo title** | Demo name + what will be shown, inverted dark bg | Before demo sections — signal energy shift |
+| **Key insight** | Single impactful statement, inverted dark bg | For "the one thing to remember" moments |
+| **Action / CTA** | Next steps cards + highlight banner | Closing slides |
+
+**Layout variety is critical.** Alternate between centered, left-aligned, split, and inverted slides. Never use the same layout for 3+ consecutive slides.
 
 **Content density rules:**
 - Title slides: heading + subtitle only
@@ -85,7 +102,20 @@ Produce a single `slides.html` file with the selected style. Follow the companio
 - All fonts from Google Fonts or Fontshare (no system fonts for display)
 - Well-commented CSS and JS for easy manual tweaking
 
-### Phase 4: Deliver
+### Phase 4: Update CLAUDE.md
+
+After generating slides, create or update the `CLAUDE.md` in the repo root with:
+- Design system reference (selected style preset, color tokens, typography, component patterns)
+- Slide architecture (number of slides, types, order)
+- Available skills reference
+- File map (which files exist, what they do)
+- Conventions (viewport rules, animation classes, keyboard shortcuts)
+
+This ensures future Claude Code sessions in the repo have full context about design decisions.
+
+**If CLAUDE.md already exists:** merge new design information into it, don't overwrite unrelated sections.
+
+### Phase 5: Deliver
 
 1. Write `slides.html` to the same directory as the `workshop.md`
 2. Clean up preview files (delete `preview-*.html`)

@@ -433,6 +433,133 @@
   }
   .section-card.wide { grid-column: 1 / -1; }
 
+  /* --- Code preview (faux editor) --- */
+  .code-preview {
+    border-radius: 12px;
+    overflow: hidden;
+    border: 1px solid var(--gray-200);
+    background: var(--gray-900);
+    font-family: var(--font-mono);
+    font-size: 12px;
+    line-height: 1.7;
+  }
+  .code-header {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    padding: 10px 16px;
+    background: var(--gray-800);
+    border-bottom: 1px solid rgba(255,255,255,0.06);
+  }
+  .code-dot {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background: var(--gray-600);
+  }
+  .code-filename {
+    margin-left: 8px;
+    font-size: 11px;
+    color: var(--gray-400);
+  }
+  .code-body {
+    padding: 16px 20px;
+    display: flex;
+    flex-direction: column;
+    gap: 1px;
+    color: var(--gray-400);
+  }
+  .code-heading { color: #e6edf3; font-weight: 600; margin-top: 2px; }
+  .code-comment { color: var(--gray-500); }
+  .code-line { color: var(--gray-300); }
+  .code-hl { color: var(--brown-200); }
+  .code-blank { height: 8px; }
+
+  /* --- Before/after comparison --- */
+  .compare-slide .slide-inner {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 24px;
+    align-items: center;
+  }
+  .compare-card {
+    border-radius: 12px;
+    overflow: hidden;
+    border: 1px solid var(--gray-200);
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+  }
+  .compare-card.after { border-color: var(--accent-border); }
+  .compare-header {
+    padding: 14px 20px;
+    font-family: var(--font-display);
+    font-size: 14px;
+    font-weight: 700;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    background: var(--gray-50);
+    border-bottom: 1px solid var(--gray-200);
+  }
+  .compare-card.after .compare-header {
+    background: var(--accent-light);
+    border-bottom-color: var(--accent-border);
+    color: var(--accent);
+  }
+  .compare-body {
+    padding: 20px;
+    font-size: 13px;
+    line-height: 1.7;
+    color: var(--gray-600);
+    flex: 1;
+  }
+  .compare-body .point {
+    padding: 6px 0;
+    display: flex;
+    align-items: baseline;
+    gap: 8px;
+  }
+  .compare-body .point::before {
+    content: '•';
+    color: var(--gray-300);
+    flex-shrink: 0;
+  }
+  .compare-card.after .compare-body .point::before {
+    content: '✓';
+    color: var(--accent);
+  }
+  .compare-body .point strong { color: var(--gray-900); font-weight: 600; }
+  .compare-body .point code {
+    font-family: var(--font-mono);
+    font-size: 11px;
+    background: var(--gray-50);
+    padding: 1px 6px;
+    border-radius: 4px;
+    border: 1px solid var(--gray-200);
+    color: var(--accent);
+  }
+
+  /* --- Skill preview --- */
+  .skillpreview-slide .slide-inner {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: clamp(1.5rem, 4vw, 3rem);
+    align-items: center;
+  }
+  .skillpreview-slide .left h2 {
+    font-family: var(--font-display);
+    font-size: clamp(1.8rem, 3.5vw, 2.8rem);
+    font-weight: 800;
+    letter-spacing: -1px;
+    margin: 16px 0 20px;
+  }
+  .skillpreview-slide .left p {
+    font-size: 15px;
+    color: var(--gray-500);
+    line-height: 1.6;
+  }
+
   /* ============================================
      SLIDE 6: KEY INSIGHT — INVERTED
      ============================================ */
@@ -748,7 +875,10 @@
      ============================================ */
   @media (max-width: 800px) {
     .level1-slide .slide-inner,
-    .arch-slide .slide-inner {
+    .arch-slide .slide-inner,
+    .skillpreview-slide .slide-inner,
+    .compare-slide .slide-inner,
+    .agents-slide .slide-body {
       grid-template-columns: 1fr;
       padding: clamp(1.5rem, 4vw, 3rem);
     }
@@ -908,34 +1038,55 @@
 </div>
 
 <!-- ================================================
-     5. AGENTS.MD CONTENT
+     5. AGENTS.MD CONTENT + CODE PREVIEW
      ================================================ -->
 <div class="slide agents-slide" id="slide-5">
   <div class="slide-inner">
-    <div class="slide-body">
-      <div class="pill accent reveal">Level 2</div>
-      <h2 class="reveal d1">What's in AGENTS.md?</h2>
-      <p class="note reveal d2">Claude reads all of this before answering a single question.</p>
-      <div class="section-grid">
-        <div class="section-card reveal d3">
-          <div class="section-card-title">Project Overview</div>
-          <div class="section-card-desc">Modular SPM codebase for FINN, Tori, DBA, Blocket</div>
+    <div class="slide-body" style="display:grid;grid-template-columns:1fr 1fr;gap:clamp(1.5rem,4vw,3rem);align-items:start;">
+      <div>
+        <div class="pill accent reveal">Level 2</div>
+        <h2 class="reveal d1">What's in AGENTS.md?</h2>
+        <p class="note reveal d2">Claude reads all of this before answering a single question.</p>
+        <div style="display:flex;flex-direction:column;gap:8px;">
+          <div class="section-card reveal d3">
+            <div class="section-card-title">Project Overview</div>
+            <div class="section-card-desc">Modular SPM codebase for FINN, Tori, DBA, Blocket</div>
+          </div>
+          <div class="section-card reveal d3">
+            <div class="section-card-title">Architecture</div>
+            <div class="section-card-desc">Module structure, Drive as shared UI, workspace layout</div>
+          </div>
+          <div class="section-card reveal d4">
+            <div class="section-card-title">Engineering Policies</div>
+            <div class="section-card-desc">SwiftLint, localization, Warp design system, concurrency</div>
+          </div>
+          <div class="section-card reveal d4">
+            <div class="section-card-title">17 Skills + CI</div>
+            <div class="section-card-desc">Tests, PRs, code review, snapshots, build verification</div>
+          </div>
         </div>
-        <div class="section-card reveal d3">
-          <div class="section-card-title">Architecture</div>
-          <div class="section-card-desc">Module structure, Drive as shared UI, workspace layout</div>
+      </div>
+      <div class="code-preview reveal d3">
+        <div class="code-header">
+          <span class="code-dot"></span><span class="code-dot"></span><span class="code-dot"></span>
+          <span class="code-filename">AGENTS.md</span>
         </div>
-        <div class="section-card reveal d4">
-          <div class="section-card-title">Engineering Policies</div>
-          <div class="section-card-desc">SwiftLint, localization, Warp design system, concurrency</div>
-        </div>
-        <div class="section-card reveal d4">
-          <div class="section-card-title">17 Skills</div>
-          <div class="section-card-desc">Tests, PRs, code review, module scaffolding, snapshots</div>
-        </div>
-        <div class="section-card wide reveal d5">
-          <div class="section-card-title">CI & Testing</div>
-          <div class="section-card-desc">Snapshot config, build verification, simulator defaults, test plans</div>
+        <div class="code-body">
+<span class="code-heading">## Architecture</span>
+<span class="code-comment">### Module Structure</span>
+<span class="code-line">- <span class="code-hl">app-modules/</span> shared cross-vertical</span>
+<span class="code-line">- <span class="code-hl">Jobs/</span>, <span class="code-hl">Mobility/</span>, <span class="code-hl">RealEstate/</span></span>
+<span class="code-line">- <span class="code-hl">nmp-app/</span> app targets</span>
+<span class="code-blank"></span>
+<span class="code-heading">## Engineering Policies</span>
+<span class="code-comment">### SwiftLint Baseline</span>
+<span class="code-line">- Do not use <span class="code-hl">print()</span>; use Logger</span>
+<span class="code-line">- Avoid force unwrap/cast/try</span>
+<span class="code-line">- Use Warp design tokens</span>
+<span class="code-blank"></span>
+<span class="code-comment">### Build Verification</span>
+<span class="code-line">- Simulator: <span class="code-hl">iPhone 17 Pro</span></span>
+<span class="code-line">- iOS <span class="code-hl">26.2</span></span>
         </div>
       </div>
     </div>
@@ -957,14 +1108,51 @@
 </div>
 
 <!-- ================================================
-     7. HOW THIS EVOLVES
+     7. BEFORE/AFTER COMPARISON
      ================================================ -->
-<div class="slide evolves-slide" id="slide-7">
+<div class="slide compare-slide" id="slide-7">
+  <div class="slide-inner">
+    <div class="compare-card reveal">
+      <div class="compare-header">
+        <span>Without context</span>
+        <span class="pill" style="margin-left:auto;font-size:10px;">Level 1</span>
+      </div>
+      <div class="compare-body">
+        <div class="point">Generic Swift style suggestions</div>
+        <div class="point">"Consider using MVVM pattern"</div>
+        <div class="point">"Add unit tests with XCTest"</div>
+        <div class="point">"Use UIColor for custom colors"</div>
+        <div class="point">No mention of project conventions</div>
+        <div class="point">No awareness of module structure</div>
+      </div>
+    </div>
+    <div class="compare-card after reveal d2">
+      <div class="compare-header">
+        <span>With repo context</span>
+        <span class="pill accent" style="margin-left:auto;font-size:10px;">Level 2</span>
+      </div>
+      <div class="compare-body">
+        <div class="point">Uses <strong>Swift Testing</strong> not XCTest</div>
+        <div class="point">References <strong>Warp tokens</strong> for colors</div>
+        <div class="point">Follows <code>AGENTS.md</code> engineering policies</div>
+        <div class="point">Knows <strong>Drive</strong> is canonical shared UI</div>
+        <div class="point">Suggests <code>/ios-write-unit-test</code> skill</div>
+        <div class="point">Aware of <strong>vertical module</strong> boundaries</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ================================================
+     8. HOW THIS EVOLVES
+     ================================================ -->
+<div class="slide evolves-slide" id="slide-8">
   <div class="slide-inner">
     <div class="slide-body">
       <div class="pill accent reveal">Level 2</div>
       <h2 class="reveal d1">How This Evolves</h2>
       <div class="accent-line reveal d2"></div>
+      <p class="reveal d2" style="font-size:15px;color:var(--gray-500);margin-bottom:24px;">We have a contribution policy — not everything goes in AGENTS.md.</p>
       <div style="margin-top: 8px;">
         <div class="flow-row reveal d3">
           <div class="flow-label">Stable rules</div>
@@ -988,17 +1176,17 @@
 </div>
 
 <!-- ================================================
-     8. SKILLS
+     9. SKILLS + MCP (MERGED)
      ================================================ -->
-<div class="slide skills-slide" id="slide-8">
+<div class="slide skills-slide" id="slide-9">
   <div class="slide-inner">
     <div class="slide-body">
       <div class="pill purple reveal">Level 3</div>
-      <h2 class="reveal d1">Repeatable Workflows</h2>
-      <p class="subtitle reveal d2">Skills are Markdown files with step-by-step instructions. We have 17.</p>
+      <h2 class="reveal d1">Skills & Connections</h2>
+      <p class="subtitle reveal d2">17 skills as Markdown checklists. Plus MCP connections to external tools.</p>
       <div class="skill-columns">
         <div class="skill-col reveal d3">
-          <h4>Daily</h4>
+          <h4>Daily Workflow</h4>
           <div class="items">
             <div class="skill-tag">/ios-pre-push</div>
             <div class="skill-tag">/ios-pr</div>
@@ -1016,27 +1204,53 @@
           </div>
         </div>
       </div>
+      <div class="reveal d5" style="display:flex;flex-wrap:wrap;gap:8px;margin-top:24px;padding-top:20px;border-top:1px solid var(--gray-100);">
+        <span style="font-family:var(--font-mono);font-size:10px;letter-spacing:2px;text-transform:uppercase;color:var(--gray-400);margin-right:8px;align-self:center;">MCP</span>
+        <div class="tool-chip">Jira</div>
+        <div class="tool-chip">Confluence</div>
+        <div class="tool-chip">Amplitude</div>
+        <div class="tool-chip">Xcode</div>
+      </div>
     </div>
   </div>
 </div>
 
 <!-- ================================================
-     9. MCP + BRIDGE
+     10. WHAT A SKILL LOOKS LIKE
      ================================================ -->
-<div class="slide bridge-slide" id="slide-9">
+<div class="slide skillpreview-slide" id="slide-10">
   <div class="slide-inner">
-    <div class="slide-body">
+    <div class="left">
       <div class="pill purple reveal">Level 3</div>
-      <h2 class="reveal d1">Connects to Tools</h2>
-      <div class="tool-list reveal d2" style="margin-top:24px;">
-        <div class="tool-chip">Jira</div>
-        <div class="tool-chip">Confluence</div>
-        <div class="tool-chip">Amplitude</div>
-        <div class="tool-chip">Xcode</div>
-        <div class="tool-chip">Superpowers</div>
-      </div>
-      <div class="bridge-cta reveal d3">
-        <p>Let's see what this looks like in practice.</p>
+      <h2 class="reveal d1">It's Just Markdown</h2>
+      <div class="accent-line reveal d2"></div>
+      <p class="reveal d3">Every skill is a Markdown file with step-by-step instructions. Anyone can read, modify, or create them.</p>
+      <p class="reveal d4" style="margin-top:20px;font-size:14px;color:var(--gray-400);font-style:italic;">Skills are not magic. They're checklists.</p>
+    </div>
+    <div class="right">
+      <div class="code-preview reveal d3">
+        <div class="code-header">
+          <span class="code-dot"></span><span class="code-dot"></span><span class="code-dot"></span>
+          <span class="code-filename">write-unit-test/SKILL.md</span>
+        </div>
+        <div class="code-body">
+<span class="code-heading">name: write-unit-test</span>
+<span class="code-blank"></span>
+<span class="code-heading">## Process</span>
+<span class="code-line">1. Read the source file</span>
+<span class="code-line">2. Identify testable logic</span>
+<span class="code-line">3. Generate tests using:</span>
+<span class="code-line">   - <span class="code-hl">@Test</span> and <span class="code-hl">@Suite</span> macros</span>
+<span class="code-line">   - <span class="code-hl">Given/When/Then</span> structure</span>
+<span class="code-line">   - Protocol-based mocks</span>
+<span class="code-line">4. Cover valid + invalid inputs</span>
+<span class="code-line">5. Cover edge cases</span>
+<span class="code-blank"></span>
+<span class="code-heading">## Conventions</span>
+<span class="code-line">- Use <span class="code-hl">Swift Testing</span>, not XCTest</span>
+<span class="code-line">- Async/await patterns</span>
+<span class="code-line">- No force unwraps in tests</span>
+        </div>
       </div>
     </div>
   </div>
@@ -1045,7 +1259,7 @@
 <!-- ================================================
      10. DEMO — INVERTED
      ================================================ -->
-<div class="slide demo-slide" id="slide-10">
+<div class="slide demo-slide" id="slide-11">
   <div class="slide-inner">
     <div class="demo-pill reveal"><span class="live-dot"></span>Live Demo</div>
     <h2 class="reveal d1">Superpowers</h2>
@@ -1057,7 +1271,7 @@
 <!-- ================================================
      11. CLOSE
      ================================================ -->
-<div class="slide close-slide" id="slide-11">
+<div class="slide close-slide" id="slide-12">
   <div class="slide-inner">
     <div class="slide-body">
       <div class="label reveal">Next Steps</div>
@@ -1089,7 +1303,7 @@
      COUNTER
      ============================================ -->
 <div class="slide-counter">
-  <span id="current">1</span> / <span id="total">11</span>
+  <span id="current">1</span> / <span id="total">12</span>
 </div>
 
 <!-- ============================================
