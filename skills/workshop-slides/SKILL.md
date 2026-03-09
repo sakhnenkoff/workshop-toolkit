@@ -1,0 +1,149 @@
+---
+name: workshop-slides
+description: Generate a participant-facing HTML slide deck from a workshop.md file. Single self-contained file with keyboard navigation, style presets, and workshop-specific slide types (polls, demos, agenda).
+---
+
+# Workshop Slides Generator
+
+Generate a presentation slide deck from a `workshop.md`. Produces a single HTML file with zero dependencies — just open in a browser and present.
+
+## When to use
+
+- After creating or updating a `workshop.md` (via `/workshop-plan` or manually)
+- When you need participant-facing slides for a workshop
+- When regenerating slides after content changes
+
+## Input
+
+Path to a `workshop.md` file. If not provided, ask the user.
+
+## Process
+
+### Phase 1: Parse
+
+Read the `workshop.md` and extract **participant-facing content only**:
+
+- Title, date, format from meta section
+- Block names and durations from Agenda
+- Key content points from each block (NOT speaker notes, NOT facilitation cues)
+- Poll questions (just the question, big and clear — not facilitation notes about reading results)
+- Demo titles and what will be shown (not the detailed script)
+- Closing action items / next steps
+- Series context if present
+
+**Do NOT include in slides:**
+- Speaker notes, narration cues, "say this" instructions
+- "How to read results" for polls
+- Facilitator assignments
+- Risk mitigation tables
+- Backup recording notes
+- Pre/post workshop comms
+
+### Phase 2: Style Selection
+
+Generate **3 single-slide HTML preview files** showing different visual styles applied to the title slide. Save them as `preview-1.html`, `preview-2.html`, `preview-3.html` in the same directory.
+
+Open all three in the browser and ask: "Which style do you prefer? Or pick elements from multiple."
+
+**Available style directions** (adapt from these, don't use verbatim):
+
+1. **Clean Dark** — Dark background, green/blue accent, monospace numbers, subtle grid texture. Professional tech feel.
+2. **Swiss Light** — White background, bold sans-serif, red accent, strong grid, Bauhaus-inspired. Clean and precise.
+3. **Terminal** — GitHub dark palette, terminal green accent, JetBrains Mono throughout, scan line effects. Developer-native.
+4. **Warm Editorial** — Cream background, serif headlines, warm accent, generous whitespace. Approachable and calm.
+
+Each preview must use the actual workshop title and meta, not placeholder text.
+
+### Phase 3: Generate
+
+Produce a single `slides.html` file with the selected style. Follow the companion files for CSS and JS patterns.
+
+**Slide types to generate:**
+
+| Slide type | Content | When |
+|------------|---------|------|
+| **Title** | Workshop name, date, format, duration | First slide |
+| **Agenda** | Timeline bar + block list with timing | Second slide |
+| **Section opener** | Block name, large, with timing badge | Before each content section |
+| **Content** | Key points from the block (4-6 max per slide) | Within sections |
+| **Poll prompt** | Just the question, large and centered, with format indicator | When a poll occurs |
+| **Demo title** | Demo name + what will be shown | Before demo sections |
+| **Key insight** | Single impactful statement, large text, accent color | For "key takeaway" moments |
+| **Action / CTA** | Next steps, links, calls to action | Closing slides |
+
+**Content density rules:**
+- Title slides: heading + subtitle only
+- Content slides: 4-6 bullets OR 2 short paragraphs maximum
+- Poll slides: question only (+ format badge like "Word Cloud" or "Scale 1-5")
+- If content exceeds limits, automatically split across multiple slides
+
+**Required features:**
+- Keyboard navigation: arrow keys, space to advance, Home/End for first/last
+- Slide counter (current / total) in bottom corner
+- Each slide fits exactly in viewport (`100vh`, no scrolling)
+- `prefers-reduced-motion` support
+- All fonts from Google Fonts or Fontshare (no system fonts for display)
+- Well-commented CSS and JS for easy manual tweaking
+
+### Phase 4: Deliver
+
+1. Write `slides.html` to the same directory as the `workshop.md`
+2. Clean up preview files (delete `preview-*.html`)
+3. Open the slides in the browser: `open slides.html`
+4. Tell the user: "Arrow keys to navigate. Press F for fullscreen."
+
+## HTML Architecture
+
+Follow the patterns from the companion `viewport-base.css` (in this skill directory) for responsive scaling.
+
+```html
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>[Workshop Title]</title>
+  <!-- Google Fonts link -->
+  <!-- All CSS inline -->
+</head>
+<body>
+  <div class="slide" id="slide-1">
+    <div class="slide-content">
+      <!-- Slide content here -->
+    </div>
+  </div>
+  <!-- More slides... -->
+
+  <div class="slide-counter">
+    <span id="current">1</span> / <span id="total">N</span>
+  </div>
+
+  <div class="nav-dots" id="dots">
+    <!-- Generated by JS -->
+  </div>
+
+  <!-- All JS inline -->
+</body>
+</html>
+```
+
+## JavaScript Requirements
+
+```javascript
+class SlidePresentation {
+  // Keyboard: ArrowRight/Space = next, ArrowLeft = prev, Home/End
+  // Touch: swipe left/right on mobile
+  // Mouse wheel: scroll between slides
+  // Progress dots: clickable navigation
+  // Intersection Observer: trigger .visible class for entrance animations
+  // Slide counter: update current/total display
+}
+```
+
+## Design Principles
+
+- **Participant-facing.** This is what people see on the shared screen. Clean, clear, no facilitator noise.
+- **One idea per slide.** If you're putting more than one concept on a slide, split it.
+- **Viewport-locked.** Every slide is exactly `100vh`. Content must fit. Use `clamp()` for responsive typography.
+- **Distinctive, not generic.** Avoid the default AI presentation look. Use the curated style presets.
+- **Code-friendly.** Use monospace for code snippets, file paths, command examples. Good syntax highlighting.

@@ -1,0 +1,767 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>AI Workshop W11 — Overview</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@300;400;500;600;700&family=DM+Sans:ital,wght@0,300;0,400;0,500;0,600;0,700;1,400&display=swap');
+
+  :root {
+    --bg: #0a0a0f;
+    --surface: #12121a;
+    --surface-raised: #1a1a26;
+    --border: #2a2a3a;
+    --border-subtle: #1e1e2e;
+    --text: #e8e8f0;
+    --text-muted: #8888a0;
+    --text-dim: #555568;
+    --accent: #6ee7b7;
+    --accent-dim: #2d6a52;
+    --accent-glow: rgba(110, 231, 183, 0.08);
+    --level1: #94a3b8;
+    --level2: #60a5fa;
+    --level3: #a78bfa;
+    --demo-a: #f59e0b;
+    --demo-b: #ec4899;
+    --mono: 'JetBrains Mono', monospace;
+    --sans: 'DM Sans', system-ui, sans-serif;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  html { scroll-behavior: smooth; scroll-snap-type: y proximity; }
+  html.snap-disabled { scroll-snap-type: none; }
+  body { background: var(--bg); color: var(--text); font-family: var(--sans); overflow-x: hidden; }
+
+  body::before {
+    content: '';
+    position: fixed;
+    inset: 0;
+    background-image:
+      linear-gradient(var(--border-subtle) 1px, transparent 1px),
+      linear-gradient(90deg, var(--border-subtle) 1px, transparent 1px);
+    background-size: 60px 60px;
+    opacity: 0.3;
+    pointer-events: none;
+    z-index: 0;
+  }
+
+  /* Nav dots */
+  .nav {
+    position: fixed; right: 28px; top: 50%; transform: translateY(-50%);
+    z-index: 100; display: flex; flex-direction: column; gap: 12px;
+  }
+  .nav a {
+    display: block; width: 10px; height: 10px; border-radius: 50%;
+    background: var(--border); border: 1px solid var(--border);
+    transition: all 0.3s; position: relative;
+  }
+  .nav a:hover { background: var(--text-muted); transform: scale(1.3); }
+  .nav a.active { background: var(--accent); border-color: var(--accent); box-shadow: 0 0 8px rgba(110,231,183,0.3); }
+  .nav a .nav-label {
+    position: absolute; right: 20px; top: 50%; transform: translateY(-50%);
+    font-family: var(--mono); font-size: 10px; letter-spacing: 0.5px;
+    color: var(--text-muted); white-space: nowrap; opacity: 0;
+    transition: opacity 0.2s; pointer-events: none;
+  }
+  .nav a:hover .nav-label { opacity: 1; }
+
+  /* Sections */
+  .section {
+    min-height: 100vh; scroll-snap-align: start;
+    display: flex; align-items: center; justify-content: center;
+    position: relative; z-index: 1; padding: 60px 80px;
+  }
+  .section-inner { max-width: 960px; width: 100%; }
+
+  .section-counter {
+    font-family: var(--mono); font-size: 11px; font-weight: 500;
+    letter-spacing: 2px; text-transform: uppercase; color: var(--text-dim);
+    margin-bottom: 24px; display: flex; align-items: center; gap: 12px;
+  }
+  .section-counter::after { content: ''; flex: 1; height: 1px; background: var(--border); }
+
+  .section-title {
+    font-family: var(--sans); font-size: 42px; font-weight: 700;
+    letter-spacing: -0.5px; margin-bottom: 12px;
+    background: linear-gradient(135deg, var(--text) 0%, var(--text-muted) 100%);
+    -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+  }
+  .section-subtitle {
+    font-size: 17px; color: var(--text-muted); line-height: 1.6;
+    max-width: 640px; margin-bottom: 48px;
+  }
+  .section-subtitle strong { color: var(--text); font-weight: 500; }
+
+  /* Title section */
+  .title-section { text-align: center; }
+  .title-section .section-inner { max-width: 720px; }
+  .title-section .section-title { font-size: 56px; margin-bottom: 16px; }
+  .title-section .section-subtitle { margin: 0 auto 40px; text-align: center; }
+  .title-meta { display: flex; justify-content: center; gap: 24px; flex-wrap: wrap; }
+  .meta-chip {
+    font-family: var(--mono); font-size: 11px; font-weight: 500;
+    letter-spacing: 1px; text-transform: uppercase; color: var(--accent);
+    background: var(--accent-glow); border: 1px solid var(--accent-dim);
+    padding: 6px 14px; border-radius: 4px;
+  }
+  .meta-chip.muted { color: var(--text-muted); background: var(--surface); border-color: var(--border); }
+  .scroll-hint {
+    position: absolute; bottom: 32px; left: 50%; transform: translateX(-50%);
+    font-family: var(--mono); font-size: 10px; color: var(--text-dim);
+    letter-spacing: 1px; animation: pulse 2s ease-in-out infinite;
+  }
+  @keyframes pulse { 0%,100% { opacity: 0.3; } 50% { opacity: 0.8; } }
+
+  /* Expandable details system */
+  .expandable { cursor: pointer; }
+
+  .expand-toggle {
+    font-family: var(--mono);
+    font-size: 12px;
+    font-weight: 300;
+    color: var(--text-dim);
+    width: 24px;
+    height: 24px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 4px;
+    background: var(--surface-raised);
+    border: 1px solid var(--border-subtle);
+    transition: all 0.2s;
+    flex-shrink: 0;
+    user-select: none;
+  }
+  .expandable:hover .expand-toggle { color: var(--text-muted); border-color: var(--border); }
+  .expandable.open .expand-toggle { color: var(--accent); border-color: var(--accent-dim); background: var(--accent-glow); }
+
+  .expand-details {
+    display: grid;
+    grid-template-rows: 0fr;
+    transition: grid-template-rows 0.3s ease, opacity 0.2s ease, margin 0.3s ease;
+    opacity: 0;
+    margin-top: 0;
+  }
+  .expand-details > * {
+    overflow: hidden;
+  }
+  .expandable.open .expand-details {
+    grid-template-rows: 1fr;
+    opacity: 1;
+    margin-top: 16px;
+  }
+
+  .detail-list {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    padding: 20px;
+    background: var(--bg);
+    border-radius: 8px;
+    border: 1px solid var(--border-subtle);
+  }
+
+  .detail-item {
+    font-size: 15px;
+    color: var(--text-muted);
+    line-height: 1.6;
+    padding-left: 20px;
+    position: relative;
+  }
+  .detail-item::before {
+    content: '';
+    position: absolute;
+    left: 0;
+    top: 9px;
+    width: 7px;
+    height: 7px;
+    border-radius: 50%;
+    background: var(--border);
+  }
+  .detail-item strong { color: var(--text); font-weight: 600; }
+  .detail-item code {
+    font-family: var(--mono);
+    font-size: 12px;
+    background: var(--surface-raised);
+    padding: 2px 8px;
+    border-radius: 3px;
+    color: var(--accent);
+  }
+
+  .detail-quote {
+    font-size: 14px;
+    color: var(--text-muted);
+    font-style: italic;
+    padding: 12px 20px;
+    border-left: 2px solid var(--accent-dim);
+    margin-top: 12px;
+  }
+
+  /* Timeline */
+  .timeline-bar {
+    display: flex; height: 8px; border-radius: 4px;
+    overflow: hidden; margin-bottom: 32px; background: var(--surface);
+  }
+  .timeline-segment { height: 100%; transition: opacity 0.3s; }
+  .timeline-segment:hover { opacity: 0.7; }
+  .timeline-segment.s1 { width: 13.3%; background: var(--level1); }
+  .timeline-segment.s2 { width: 20%; background: var(--level2); }
+  .timeline-segment.s3 { width: 41.7%; background: var(--accent); }
+  .timeline-segment.s4 { width: 16.7%; background: var(--demo-a); }
+  .timeline-segment.s5 { width: 8.3%; background: var(--level3); }
+
+  .blocks { display: flex; flex-direction: column; gap: 4px; }
+  .block {
+    display: grid; grid-template-columns: 64px 1fr auto;
+    align-items: start; gap: 20px; padding: 16px 20px;
+    border-radius: 8px; background: var(--surface);
+    border: 1px solid var(--border-subtle);
+    transition: border-color 0.2s, background 0.2s;
+  }
+  .block:hover { border-color: var(--border); background: var(--surface-raised); }
+  .block-time { font-family: var(--mono); font-size: 14px; font-weight: 500; color: var(--text-muted); padding-top: 1px; }
+  .block-name { font-size: 18px; font-weight: 600; display: flex; align-items: center; gap: 10px; }
+  .block-desc { font-size: 14px; color: var(--text-dim); margin-top: 6px; }
+  .block-dot { width: 8px; height: 8px; border-radius: 50%; flex-shrink: 0; }
+  .block-duration {
+    font-family: var(--mono); font-size: 14px; font-weight: 600; color: var(--text-dim);
+    text-align: right; padding-top: 1px;
+    display: flex; align-items: center; gap: 8px; justify-content: flex-end;
+  }
+
+  /* Levels */
+  .levels-grid { display: flex; flex-direction: column; gap: 12px; }
+  .level-card {
+    position: relative; padding: 28px 32px; border-radius: 10px;
+    background: var(--surface); border: 1px solid var(--border-subtle);
+    transition: border-color 0.2s;
+    display: grid; grid-template-columns: 200px 1fr; gap: 24px; align-items: start;
+  }
+  .level-card:hover { border-color: var(--border); }
+  .level-card::before {
+    content: ''; position: absolute; left: 0; top: 0; bottom: 0; width: 3px;
+    border-radius: 10px 0 0 10px;
+  }
+  .level-card.l1::before { background: var(--level1); }
+  .level-card.l2::before { background: var(--level2); }
+  .level-card.l3::before { background: var(--level3); }
+  .level-number { font-family: var(--mono); font-size: 10px; font-weight: 600; letter-spacing: 2px; text-transform: uppercase; margin-bottom: 6px; }
+  .l1 .level-number { color: var(--level1); }
+  .l2 .level-number { color: var(--level2); }
+  .l3 .level-number { color: var(--level3); }
+  .level-title { font-size: 20px; font-weight: 700; display: flex; align-items: center; gap: 10px; }
+  .level-desc { font-size: 15px; color: var(--text-muted); line-height: 1.6; }
+  .level-examples { margin-top: 8px; display: flex; flex-wrap: wrap; gap: 6px; }
+  .level-example {
+    font-family: var(--mono); font-size: 12px; padding: 5px 12px;
+    border-radius: 12px; background: var(--surface-raised);
+    border: 1px solid var(--border-subtle); color: var(--text-dim);
+  }
+  .level-insight {
+    margin-top: 24px; padding: 16px 24px; border-radius: 8px;
+    background: rgba(96,165,250,0.06); border: 1px solid rgba(96,165,250,0.15);
+    font-size: 16px; color: var(--level2); font-weight: 500; text-align: center;
+  }
+
+  /* Demos */
+  .demos-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; align-items: start; }
+  .demo-card {
+    padding: 28px; border-radius: 10px; background: var(--surface);
+    border: 1px solid var(--border-subtle); transition: border-color 0.2s;
+    display: flex; flex-direction: column;
+  }
+  .demo-card:hover { border-color: var(--border); }
+  .demo-header { display: flex; align-items: center; gap: 10px; margin-bottom: 16px; }
+  .demo-badge { font-family: var(--mono); font-size: 10px; font-weight: 700; letter-spacing: 1px; padding: 4px 10px; border-radius: 4px; }
+  .demo-badge.a { background: rgba(245,158,11,0.12); color: var(--demo-a); border: 1px solid rgba(245,158,11,0.25); }
+  .demo-badge.b { background: rgba(236,72,153,0.12); color: var(--demo-b); border: 1px solid rgba(236,72,153,0.25); }
+  .demo-title { font-size: 18px; font-weight: 700; }
+  .demo-timing { font-family: var(--mono); font-size: 12px; color: var(--text-dim); margin-left: auto; }
+  .demo-desc { font-size: 15px; color: var(--text-muted); line-height: 1.6; margin-bottom: 20px; flex: 1; }
+  .demo-file {
+    font-family: var(--mono); font-size: 11px; color: var(--text-dim);
+    background: var(--bg); padding: 10px 14px; border-radius: 6px;
+    border: 1px solid var(--border-subtle); overflow-x: auto; white-space: nowrap;
+    margin-bottom: 16px;
+  }
+  .demo-file .highlight { color: var(--text); }
+  .demo-steps { display: flex; flex-direction: column; gap: 6px; }
+  .demo-step { display: flex; align-items: center; gap: 10px; font-size: 14px; color: var(--text-muted); }
+  .demo-step-num {
+    font-family: var(--mono); font-size: 10px; font-weight: 600;
+    width: 22px; height: 22px; border-radius: 50%;
+    display: flex; align-items: center; justify-content: center; flex-shrink: 0;
+  }
+  .demo-card:nth-child(1) .demo-step-num { background: rgba(245,158,11,0.1); color: var(--demo-a); border: 1px solid rgba(245,158,11,0.2); }
+  .demo-card:nth-child(2) .demo-step-num { background: rgba(236,72,153,0.1); color: var(--demo-b); border: 1px solid rgba(236,72,153,0.2); }
+
+  /* Polls */
+  .polls-grid { display: flex; flex-direction: column; gap: 16px; }
+  .poll-card {
+    display: grid; grid-template-columns: 56px 1fr 120px;
+    gap: 24px; align-items: start; padding: 24px 28px;
+    border-radius: 10px; background: var(--surface);
+    border: 1px solid var(--border-subtle); transition: border-color 0.2s;
+  }
+  .poll-card:hover { border-color: var(--border); }
+  .poll-number {
+    font-family: var(--mono); font-size: 18px; font-weight: 700;
+    color: var(--accent); background: var(--accent-glow);
+    border: 1px solid var(--accent-dim); width: 44px; height: 44px;
+    display: flex; align-items: center; justify-content: center; border-radius: 8px;
+  }
+  .poll-question { font-size: 17px; font-weight: 500; margin-bottom: 6px; }
+  .poll-purpose { font-size: 14px; color: var(--text-dim); }
+  .poll-type-wrap {
+    display: flex; flex-direction: column; align-items: flex-end; gap: 8px;
+    justify-self: end;
+  }
+  .poll-type {
+    font-family: var(--mono); font-size: 11px; color: var(--text-dim);
+    text-transform: uppercase; letter-spacing: 1px; text-align: right;
+    padding: 6px 12px; background: var(--surface-raised);
+    border: 1px solid var(--border-subtle); border-radius: 4px;
+  }
+
+  /* Close */
+  .close-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
+  .close-card {
+    padding: 24px 28px; border-radius: 10px; background: var(--surface);
+    border: 1px solid var(--border-subtle); transition: border-color 0.2s, transform 0.2s;
+  }
+  .close-card:hover { border-color: var(--border); transform: translateY(-2px); }
+  .close-card-title { font-size: 16px; font-weight: 600; margin-bottom: 8px; }
+  .close-card-desc { font-size: 14px; color: var(--text-muted); line-height: 1.6; }
+  .close-cta {
+    grid-column: 1 / -1; margin-top: 8px; padding: 20px 28px;
+    border-radius: 10px; background: var(--accent-glow);
+    border: 1px solid var(--accent-dim); text-align: center;
+  }
+  .close-cta-text { font-size: 16px; font-weight: 600; color: var(--accent); }
+  .close-cta-sub { font-size: 13px; color: var(--text-dim); margin-top: 4px; }
+
+  .section-footer {
+    position: absolute; bottom: 24px; left: 80px; right: 80px;
+    display: flex; justify-content: space-between;
+    font-family: var(--mono); font-size: 11px; color: var(--text-dim);
+  }
+
+  @keyframes fadeIn { from { opacity: 0; transform: translateY(12px); } to { opacity: 1; transform: translateY(0); } }
+  .animate-in { opacity: 0; animation: fadeIn 0.5s ease-out forwards; }
+  .delay-1 { animation-delay: 0.1s; } .delay-2 { animation-delay: 0.2s; }
+
+  @media (max-width: 900px) {
+    .section { padding: 40px 24px; }
+    .section-title { font-size: 32px; }
+    .title-section .section-title { font-size: 40px; }
+    .demos-grid, .close-grid { grid-template-columns: 1fr; }
+    .level-card { grid-template-columns: 1fr; }
+    .nav { display: none; }
+  }
+</style>
+</head>
+<body>
+
+<nav class="nav">
+  <a href="#title" class="active" id="nav-title"><span class="nav-label">Title</span></a>
+  <a href="#agenda" id="nav-agenda"><span class="nav-label">Agenda</span></a>
+  <a href="#levels" id="nav-levels"><span class="nav-label">Three Levels</span></a>
+  <a href="#demos" id="nav-demos"><span class="nav-label">Demos</span></a>
+  <a href="#polls" id="nav-polls"><span class="nav-label">Polls</span></a>
+  <a href="#close" id="nav-close"><span class="nav-label">Close</span></a>
+</nav>
+
+<!-- TITLE -->
+<section class="section title-section" id="title">
+  <div class="section-inner">
+    <div class="section-title animate-in">AI in Our Repo</div>
+    <p class="section-subtitle animate-in delay-1">
+      Introduction workshop &mdash; create curiosity, show what's possible, get everyone on board.
+      <strong>No hands-on required.</strong>
+    </p>
+    <div class="title-meta animate-in delay-2">
+      <span class="meta-chip">Workshop 1 of 2</span>
+      <span class="meta-chip muted">Week 11 &middot; March 2026</span>
+      <span class="meta-chip muted">60 minutes</span>
+      <span class="meta-chip muted">Remote</span>
+    </div>
+  </div>
+  <div class="scroll-hint">SCROLL TO NAVIGATE &middot; CLICK ITEMS TO EXPAND</div>
+</section>
+
+<!-- AGENDA -->
+<section class="section" id="agenda">
+  <div class="section-inner">
+    <div class="section-counter">01 &mdash; Agenda</div>
+    <div class="section-title">60 Minutes, 5 Blocks</div>
+    <p class="section-subtitle">Each block has a clear purpose. Detailed talking points are in sections below.</p>
+
+    <div class="timeline-bar">
+      <div class="timeline-segment s1"></div>
+      <div class="timeline-segment s2"></div>
+      <div class="timeline-segment s3"></div>
+      <div class="timeline-segment s4"></div>
+      <div class="timeline-segment s5"></div>
+    </div>
+
+    <div class="blocks">
+      <div class="block expandable" onclick="toggle(this)">
+        <span class="block-time">0:00</span>
+        <div class="block-content">
+          <div class="block-name"><span class="block-dot" style="background:var(--level1)"></span>Opening + Pulse Check</div>
+          <div class="block-desc">Frame the session, run Slido poll #1, acknowledge mixed levels</div>
+          <div class="expand-details">
+            <div class="detail-list">
+              <div class="detail-item"><strong>Frame it:</strong> "This hour is about showing you what's possible &mdash; not teaching everything"</div>
+              <div class="detail-item"><strong>Acknowledge:</strong> "Whether you've never used AI tools or use them daily, you'll see something new"</div>
+              <div class="detail-item"><strong>Run Slido poll #1:</strong> "How do you currently use AI in your development?"</div>
+              <div class="detail-item">Show results live &mdash; acknowledge the spread, normalize all levels</div>
+              <div class="detail-item">Share Slido join code in meeting chat at this point</div>
+            </div>
+          </div>
+        </div>
+        <span class="block-duration">8 min <span class="expand-toggle">+</span></span>
+      </div>
+
+      <div class="block">
+        <span class="block-time">0:08</span>
+        <div class="block-content">
+          <div class="block-name"><span class="block-dot" style="background:var(--level2)"></span>The Three Levels</div>
+          <div class="block-desc">Use Claude &rarr; Give Context &rarr; Skills & Agents. Walk through the core mental model with examples from our repo.</div>
+        </div>
+        <span class="block-duration">12 min</span>
+      </div>
+
+      <div class="block">
+        <span class="block-time">0:20</span>
+        <div class="block-content">
+          <div class="block-name"><span class="block-dot" style="background:var(--accent)"></span>Demo Block</div>
+          <div class="block-desc">Two live demos &mdash; A: same file reviewed with/without context. B: run /ios-write-unit-test on untested ViewModel.</div>
+        </div>
+        <span class="block-duration">25 min</span>
+      </div>
+
+      <div class="block">
+        <span class="block-time">0:45</span>
+        <div class="block-content">
+          <div class="block-name"><span class="block-dot" style="background:var(--demo-a)"></span>Polls + Q&A</div>
+          <div class="block-desc">Slido word cloud of pain points, likelihood-to-try scale, then upvoted Q&A &mdash; top 2-3 questions answered live.</div>
+        </div>
+        <span class="block-duration">10 min</span>
+      </div>
+
+      <div class="block">
+        <span class="block-time">0:55</span>
+        <div class="block-content">
+          <div class="block-name"><span class="block-dot" style="background:var(--level3)"></span>Close + Next Steps</div>
+          <div class="block-desc">Share setup guide + cheat sheet, launch #ios-ai-workflows Slack channel, tease March 25 hands-on workshop.</div>
+        </div>
+        <span class="block-duration">5 min</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- THREE LEVELS -->
+<section class="section" id="levels">
+  <div class="section-inner">
+    <div class="section-counter">02 &mdash; Core Concept</div>
+    <div class="section-title">The Three Levels</div>
+    <p class="section-subtitle">This is the main idea we want everyone to walk away with. Click each level for what to say.</p>
+
+    <div class="levels-grid">
+      <div class="level-card l1 expandable" onclick="toggle(this)">
+        <div class="level-left">
+          <div class="level-number">Level 1</div>
+          <div class="level-title">Use Claude for Coding <span class="expand-toggle">+</span></div>
+        </div>
+        <div class="level-right">
+          <div class="level-desc">Ask questions, generate code, get explanations. Works anywhere, but Claude doesn't know our project, conventions, or architecture.</div>
+          <div class="level-examples">
+            <span class="level-example">Ask a question</span>
+            <span class="level-example">Generate a function</span>
+            <span class="level-example">Debug an error</span>
+          </div>
+          <div class="expand-details">
+            <div class="detail-list">
+              <div class="detail-item">"This is where most people start &mdash; and it's a perfectly valid way to use AI"</div>
+              <div class="detail-item">"You can use ChatGPT, Copilot, or Claude in any folder &mdash; it'll give you answers"</div>
+              <div class="detail-item">"But it doesn't know we use Warp tokens instead of hardcoded colors, or that we prefer Swift Testing over XCTest"</div>
+              <div class="detail-item"><strong>Analogy:</strong> "It's like hiring a contractor who's great at Swift but has never seen our codebase"</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="level-card l2 expandable" onclick="toggle(this)">
+        <div class="level-left">
+          <div class="level-number">Level 2</div>
+          <div class="level-title">Give Claude Context <span class="expand-toggle">+</span></div>
+        </div>
+        <div class="level-right">
+          <div class="level-desc">CLAUDE.md, AGENTS.md, and rules are read automatically when you run Claude inside the repo. Same question, vastly better answer.</div>
+          <div class="level-examples">
+            <span class="level-example">Global ~/.claude/</span>
+            <span class="level-example">Repo CLAUDE.md</span>
+            <span class="level-example">.claude/rules/</span>
+          </div>
+          <div class="expand-details">
+            <div class="detail-list">
+              <div class="detail-item">"This is where the magic happens &mdash; and it takes zero effort from you"</div>
+              <div class="detail-item"><strong>Three layers:</strong> Global (your personal prefs), Repo (shared team knowledge in git), Local (your machine-specific settings)</div>
+              <div class="detail-item"><code>AGENTS.md</code> tells Claude about our architecture, module structure, engineering policies, SwiftLint rules, Warp design system</div>
+              <div class="detail-item"><code>.claude/rules/</code> are always loaded &mdash; things like our Unleash CLI reference</div>
+              <div class="detail-item"><strong>Key point:</strong> "All of this is version-controlled. When we improve it, everyone gets the improvement."</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="level-card l3 expandable" onclick="toggle(this)">
+        <div class="level-left">
+          <div class="level-number">Level 3</div>
+          <div class="level-title">Skills, Agents & MCP <span class="expand-toggle">+</span></div>
+        </div>
+        <div class="level-right">
+          <div class="level-desc">Repeatable workflows defined as Markdown. 17 skills available. Plus MCP connections to Jira, Confluence, Amplitude, Xcode.</div>
+          <div class="level-examples">
+            <span class="level-example">/ios-write-unit-test</span>
+            <span class="level-example">/ios-pr</span>
+            <span class="level-example">/ios-review-code</span>
+          </div>
+          <div class="expand-details">
+            <div class="detail-list">
+              <div class="detail-item">"Instead of just giving Claude knowledge, you give it <strong>repeatable workflows</strong>"</div>
+              <div class="detail-item">"Skills are Markdown files with step-by-step instructions. We have 17 of them."</div>
+              <div class="detail-item"><strong>Daily:</strong> <code>/ios-pre-push</code>, <code>/ios-pr</code>, <code>/ios-review-code</code>, <code>/ios-write-unit-test</code></div>
+              <div class="detail-item"><strong>Building:</strong> <code>/ios-create-new-module</code>, <code>/ios-plan-feature</code>, <code>/ios-warp-design-system</code></div>
+              <div class="detail-item"><strong>MCP:</strong> Jira, Confluence, Amplitude, Xcode &mdash; Claude can talk to these tools directly</div>
+              <div class="detail-item">"You don't need to be at this level today &mdash; but knowing it exists matters"</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="level-insight">The jump from Level 1 to Level 2 is enormous &mdash; and you get it for free just by running Claude inside our repo.</div>
+  </div>
+</section>
+
+<!-- DEMOS -->
+<section class="section" id="demos">
+  <div class="section-inner">
+    <div class="section-counter">03 &mdash; Demo Plan</div>
+    <div class="section-title">Two Live Demos</div>
+    <p class="section-subtitle">Real files, real skills, real output. Click each demo for the detailed script.</p>
+
+    <div class="demos-grid">
+      <div class="demo-card expandable" onclick="toggle(this)">
+        <div class="demo-header">
+          <span class="demo-badge a">DEMO A</span>
+          <span class="demo-title">Context Changes Everything</span>
+          <span class="demo-timing">~12 min</span><span class="expand-toggle">+</span>
+        </div>
+        <div class="demo-desc">Same file reviewed with and without repo context. Show the dramatic difference, then open the hood.</div>
+        <div class="demo-file"><span class="highlight">AiApplicationLetterViewModel.swift</span><br>Jobs/Sources/JobEasyApply/Internal/Views/AiApplicationLetter/</div>
+        <div class="demo-steps">
+          <div class="demo-step"><span class="demo-step-num">1</span> Review from /tmp (generic)</div>
+          <div class="demo-step"><span class="demo-step-num">2</span> Review from repo (context-aware)</div>
+          <div class="demo-step"><span class="demo-step-num">3</span> Open CLAUDE.md + AGENTS.md</div>
+          <div class="demo-step"><span class="demo-step-num">4</span> Show .claude/rules/ and skills/</div>
+        </div>
+        <div class="expand-details">
+          <div>
+            <div class="detail-list">
+              <div class="detail-item"><strong>Step 1 (3 min):</strong> Open terminal in <code>/tmp</code>, run <code>claude</code>, paste the file, ask "Review this ViewModel for code quality"</div>
+              <div class="detail-item">Narrate: "Generic Swift suggestions. No Warp, no module awareness, no project conventions."</div>
+              <div class="detail-item"><strong>Step 2 (4 min):</strong> Open Claude Code in the repo: <code>cd ios-app && claude</code>. Ask the same review question pointing to the file.</div>
+              <div class="detail-item">Narrate: "Now it references AGENTS.md policies, Warp tokens, SwiftLint rules. Same question, completely different answer."</div>
+              <div class="detail-item"><strong>Step 3 (5 min):</strong> Open <code>CLAUDE.md</code> &rarr; <code>AGENTS.md</code> &rarr; show key sections. Then <code>.claude/rules/</code> and <code>.claude/skills/</code>.</div>
+              <div class="detail-item">Mental model: <code>CLAUDE.md</code> = entry point, <code>AGENTS.md</code> = policies, <code>rules/</code> = always-on, <code>skills/</code> = on-demand</div>
+            </div>
+            <div class="detail-quote">If Claude is slow: switch to backup recording. Key message still lands &mdash; "The difference is context."</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="demo-card expandable" onclick="toggle(this)">
+        <div class="demo-header">
+          <span class="demo-badge b">DEMO B</span>
+          <span class="demo-title">Skills in Action</span>
+          <span class="demo-timing">~13 min</span><span class="expand-toggle">+</span>
+        </div>
+        <div class="demo-desc">Run /ios-write-unit-test on a real untested ViewModel. Then demystify the skill file.</div>
+        <div class="demo-file"><span class="highlight">UserDetailsFormViewModel.swift</span><br>Jobs/Sources/JobProfile/Internal/ViewModel/</div>
+        <div class="demo-steps">
+          <div class="demo-step"><span class="demo-step-num">1</span> Show file (89 lines, 0 tests)</div>
+          <div class="demo-step"><span class="demo-step-num">2</span> Run /ios-write-unit-test</div>
+          <div class="demo-step"><span class="demo-step-num">3</span> Show generated tests</div>
+          <div class="demo-step"><span class="demo-step-num">4</span> Open SKILL.md</div>
+        </div>
+        <div class="expand-details">
+          <div>
+            <div class="detail-list">
+              <div class="detail-item"><strong>Step 1 (2 min):</strong> Open the file, walk through it &mdash; "Validates name, email, phone. Uses Combine. Has zero tests."</div>
+              <div class="detail-item"><strong>Step 2 (5 min):</strong> Run <code>/ios-write-unit-test UserDetailsFormViewModel.swift</code>. While it runs, narrate what's happening.</div>
+              <div class="detail-item">Narrate: "It's reading the skill file, reading AGENTS.md, analyzing the validation logic, generating tests."</div>
+              <div class="detail-item"><strong>Step 3:</strong> Show the output. Point out: uses <code>@Test</code> and <code>@Suite</code> (Swift Testing), tests valid and invalid inputs, tests edge cases.</div>
+              <div class="detail-item"><strong>Step 4 (4 min):</strong> Open <code>.claude/skills/write-unit-test/SKILL.md</code>. "This is the entire skill. It's a Markdown file."</div>
+              <div class="detail-item">Key message: "Skills are not magic. They're checklists. Anyone can read, modify, or create them."</div>
+              <div class="detail-item">Flash the full skill list: daily workflow, building, CI. Mention MCP servers briefly.</div>
+            </div>
+            <div class="detail-quote">If it fails: show backup recording. Open the SKILL.md file anyway &mdash; the demystification doesn't need Claude running.</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- POLLS -->
+<section class="section" id="polls">
+  <div class="section-inner">
+    <div class="section-counter">04 &mdash; Interaction</div>
+    <div class="section-title">Slido Polls + Q&A</div>
+    <p class="section-subtitle">Three polls and upvoted Q&A. Click each for facilitation notes.</p>
+
+    <div class="polls-grid">
+      <div class="poll-card expandable" onclick="toggle(this)">
+        <div class="poll-number">1</div>
+        <div class="poll-content">
+          <div class="poll-question">How do you currently use AI in your development?</div>
+          <div class="poll-purpose">Opening &mdash; gauge the room, normalize all levels</div>
+          <div class="expand-details">
+            <div class="detail-list">
+              <div class="detail-item"><strong>When:</strong> Block 1 (minute 3)</div>
+              <div class="detail-item"><strong>Options:</strong> Don't use AI / ChatGPT-style Q&A / Copilot suggestions / Claude Code in terminal / Claude Code with skills</div>
+              <div class="detail-item"><strong>How to read results:</strong> If mostly low usage &rarr; "Great, we'll show you what's built." If power users &rarr; "We need your help spreading this."</div>
+              <div class="detail-item">Don't dwell &mdash; 2 minutes showing results max, then move on</div>
+            </div>
+          </div>
+        </div>
+        <div class="poll-type-wrap"><div class="poll-type">Multi-select</div><span class="expand-toggle">+</span></div>
+      </div>
+
+      <div class="poll-card expandable" onclick="toggle(this)">
+        <div class="poll-number">2</div>
+        <div class="poll-content">
+          <div class="poll-question">What repetitive task would you most want to speed up?</div>
+          <div class="poll-purpose">Closing &mdash; map answers to existing skills, capture new ideas</div>
+          <div class="expand-details">
+            <div class="detail-list">
+              <div class="detail-item"><strong>When:</strong> Block 4 (minute 45)</div>
+              <div class="detail-item"><strong>How to read results:</strong> Map the biggest words to existing skills live:</div>
+              <div class="detail-item">"Testing" &rarr; <code>/ios-write-unit-test</code>, <code>/ios-write-snapshot-test</code></div>
+              <div class="detail-item">"PR" / "code review" &rarr; <code>/ios-pr</code>, <code>/ios-review-code</code></div>
+              <div class="detail-item">"Localization" &rarr; <code>/ios-localization-flow</code></div>
+              <div class="detail-item">If something has no skill: "This is exactly the kind of thing we can build a skill for"</div>
+              <div class="detail-item">These results also feed into planning the March 25 hands-on exercises</div>
+            </div>
+          </div>
+        </div>
+        <div class="poll-type-wrap"><div class="poll-type">Word cloud</div><span class="expand-toggle">+</span></div>
+      </div>
+
+      <div class="poll-card expandable" onclick="toggle(this)">
+        <div class="poll-number">3</div>
+        <div class="poll-content">
+          <div class="poll-question">After seeing this, how likely are you to try Claude Code this week?</div>
+          <div class="poll-purpose">Closing &mdash; measure impact, don't comment on low scores</div>
+          <div class="expand-details">
+            <div class="detail-list">
+              <div class="detail-item"><strong>When:</strong> Block 4 (minute 49)</div>
+              <div class="detail-item"><strong>How to read results:</strong> Show the average. If 3+ we're doing well.</div>
+              <div class="detail-item"><strong>Important:</strong> Don't comment negatively on low scores &mdash; just say "Whatever your number, the setup instructions are coming"</div>
+              <div class="detail-item">This is our baseline metric. We'll compare with the post-workshop survey at 1 month.</div>
+            </div>
+          </div>
+        </div>
+        <div class="poll-type-wrap"><div class="poll-type">Scale 1&ndash;5</div><span class="expand-toggle">+</span></div>
+      </div>
+
+      <div class="poll-card expandable" onclick="toggle(this)">
+        <div class="poll-number">Q</div>
+        <div class="poll-content">
+          <div class="poll-question">Slido Q&A with upvoting</div>
+          <div class="poll-purpose">Closing &mdash; best questions float to top, take top 2-3</div>
+          <div class="expand-details">
+            <div class="detail-list">
+              <div class="detail-item"><strong>When:</strong> Block 4 (minute 51, after polls)</div>
+              <div class="detail-item">Switch to Slido Q&A view &mdash; participants submit and upvote each other's questions</div>
+              <div class="detail-item">Take the top 2-3 by upvotes. Cap at 3 &mdash; "Let's continue in #ios-ai-workflows"</div>
+              <div class="detail-item"><strong>Fallback Q1:</strong> "Does Claude send our code to external servers?" (address privacy)</div>
+              <div class="detail-item"><strong>Fallback Q2:</strong> "Can I break anything?" (no &mdash; it asks permission before running commands)</div>
+            </div>
+          </div>
+        </div>
+        <div class="poll-type-wrap"><div class="poll-type">Upvote Q&A</div><span class="expand-toggle">+</span></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- CLOSE -->
+<section class="section" id="close">
+  <div class="section-inner">
+    <div class="section-counter">05 &mdash; Close & Next Steps</div>
+    <div class="section-title">What Happens After</div>
+    <p class="section-subtitle">The workshop ends with clear, actionable next steps and momentum mechanisms.</p>
+
+    <div class="close-grid">
+      <div class="close-card">
+        <div class="close-card-title">Setup Links</div>
+        <div class="close-card-desc">Share Claude Code setup guide and the cheat sheet (Documentation/CLAUDE-CODE-CHEAT-SHEET.md) in meeting chat.</div>
+      </div>
+      <div class="close-card">
+        <div class="close-card-title">Slack Channel</div>
+        <div class="close-card-desc">Launch #ios-ai-workflows &mdash; post wins, questions, skill ideas. Make it public at this moment.</div>
+      </div>
+      <div class="close-card">
+        <div class="close-card-title">March 25 Hands-On</div>
+        <div class="close-card-desc">Tease the next workshop: "You'll run skills yourself, generate tests, create PRs. Get set up before then."</div>
+      </div>
+      <div class="close-card">
+        <div class="close-card-title">Workshop Branch</div>
+        <div class="close-card-desc">Demos run from workshop/ai-intro-march-2026 branch. Frozen state, predictable results, safe to experiment.</div>
+      </div>
+      <div class="close-cta">
+        <div class="close-cta-text">"Try one AI skill in your real work this week. Post what happened."</div>
+        <div class="close-cta-sub">The closing ask &mdash; simple, specific, actionable</div>
+      </div>
+    </div>
+  </div>
+  <div class="section-footer">
+    <span>workshop/ai-intro-march-2026</span>
+    <span>workshops/2026-03-W11-ai-intro/workshop.md</span>
+  </div>
+</section>
+
+<script>
+  function toggle(el) {
+    el.classList.toggle('open');
+    // Update the toggle button text
+    const btn = el.querySelector('.expand-toggle');
+    if (btn) btn.textContent = el.classList.contains('open') ? '-' : '+';
+    // Disable snap when any item is expanded, re-enable when all collapsed
+    const anyOpen = document.querySelectorAll('.expandable.open').length > 0;
+    document.documentElement.classList.toggle('snap-disabled', anyOpen);
+  }
+
+  const sections = document.querySelectorAll('.section');
+  const navLinks = document.querySelectorAll('.nav a');
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        navLinks.forEach(link => link.classList.remove('active'));
+        const id = entry.target.id;
+        const activeLink = document.getElementById('nav-' + id);
+        if (activeLink) activeLink.classList.add('active');
+      }
+    });
+  }, { threshold: 0.3 });
+  sections.forEach(section => observer.observe(section));
+</script>
+
+</body>
+</html>
