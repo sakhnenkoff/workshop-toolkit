@@ -85,12 +85,31 @@ Write the complete `workshop.md` following the structure template below. Save it
 
 Before writing, confirm the full structure with the user: "Here's the workshop at a glance — [show block list with timing]. Ready to write?"
 
-### Phase 7: Initialize CLAUDE.md
+### Phase 7: Initialize CLAUDE.md & AGENTS.md
 
-After writing `workshop.md`, check if a `CLAUDE.md` exists in the repo root:
-- If not, create a basic one with: project description, available skills reference, active workshop info, and file map
+**CLAUDE.md** (repo root):
+- If not present, create with: project description, available skills reference, active workshop info, and file map
 - If it exists, update the "Active Workshop" section with the new workshop's details
 - This ensures `/workshop-slides` and `/workshop-cheatsheet` can read context when invoked later
+
+**AGENTS.md** (workshop directory, same level as `workshop.md`):
+Create an `AGENTS.md` listing available workshop skills so any Claude Code session in that directory knows what tools are available:
+
+```markdown
+# AGENTS.md
+
+## Available Skills
+
+| Skill | Command | Purpose |
+|-------|---------|---------|
+| workshop-slides | `/workshop-slides` | Generate slide deck from workshop.md |
+| workshop-cheatsheet | `/workshop-cheatsheet` | Generate facilitator cheatsheet from workshop.md |
+| workshop-toggle-controls | `/workshop-toggle-controls` | Toggle all keyboard controls on/off for presenting |
+
+## Presenting
+
+Before presenting, run `/workshop-toggle-controls` to disable keyboard intercepts (arrows, Space, Home/End, F) so the browser handles them normally. Re-run after presenting to restore controls.
+```
 
 ## Workshop.md Structure Template
 

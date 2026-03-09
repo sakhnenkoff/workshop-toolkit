@@ -115,7 +115,35 @@ This ensures future Claude Code sessions in the repo have full context about des
 
 **If CLAUDE.md already exists:** merge new design information into it, don't overwrite unrelated sections.
 
-### Phase 5: Deliver
+### Phase 5: Generate AGENTS.md
+
+Create or update an `AGENTS.md` in the workshop directory (same level as `slides.html`) that lists available workshop skills for any Claude Code session working in that directory:
+
+```markdown
+# AGENTS.md
+
+## Available Skills
+
+| Skill | Command | Purpose |
+|-------|---------|---------|
+| workshop-slides | `/workshop-slides` | Regenerate slide deck from workshop.md |
+| workshop-cheatsheet | `/workshop-cheatsheet` | Generate facilitator cheatsheet from workshop.md |
+| workshop-toggle-controls | `/workshop-toggle-controls` | Toggle all keyboard controls on/off for presenting |
+
+## Files
+
+- `workshop.md` — source of truth (facilitation guide)
+- `slides.html` — participant-facing slide deck
+- `cheatsheet.html` — facilitator cheatsheet (if generated)
+
+## Presenting
+
+Before presenting, run `/workshop-toggle-controls` to disable keyboard intercepts (arrows, Space, Home/End, F) so the browser handles them normally. Re-run after presenting to restore controls for development.
+```
+
+**If AGENTS.md already exists:** merge the skills table and presenting section, don't overwrite other content.
+
+### Phase 6: Deliver
 
 1. Write `slides.html` to the same directory as the `workshop.md`
 2. Clean up preview files (delete `preview-*.html`)
