@@ -41,9 +41,16 @@ For each slide in `slides.html`, verify:
 - Check `cheatsheet.html` section labels match (e.g., `Slide 5 — Title`)
 
 ### 3. Content accuracy
-- For each slide, verify the speaking notes in `workshop.md` and `cheatsheet.html` describe what's actually on that slide
-- Check for stale references to removed content (e.g., MCP, old skill counts, removed components)
-- Verify pill/badge text matches (e.g., "The fix" vs "How it works")
+For each slide, read the actual HTML and verify the speaking notes match what's visually on screen:
+
+- **Layout references**: If the cheatsheet says "columns" but the slide uses cards, that's stale. If it says "two cards" but the slide has a grid of four, that's wrong. Match the actual visual structure.
+- **Visual elements**: If a slide has a code preview, callout card, comparison cards, terminal mockups, or a grid — the cheatsheet should mention them so the presenter knows what to point at.
+- **Text content**: Check that specific examples mentioned in speaking notes match what's actually written on the slide (e.g., if the slide says "Drive" but the notes say "shared folder").
+- **Pill/badge text**: Verify pill text matches (e.g., "The fix" vs "How it works" vs "Contributing").
+- **Stale references**: Search all three files for removed content (old tool names, old channel names, old slide structures like "MCP", wrong skill counts).
+- **CTA cards**: If the closing slide has 3 cards, the cheatsheet should walk through all 3 — not summarize differently.
+
+**This is the most important check.** Number and title mismatches are easy to spot. Content drift is subtle and causes the presenter to describe something that isn't on screen.
 
 ### 4. Structural consistency
 - Each slide should have its own section heading in `workshop.md` (not lumped together unless they're genuinely a pair)
