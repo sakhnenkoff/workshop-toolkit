@@ -1,15 +1,15 @@
 ---
 name: workshop-plan
-description: Design a workshop from scratch through guided conversation. Produces a structured workshop.md with full facilitation design — timing, polls, demos, speaker notes, fallback plans, and pre/post comms.
+description: Design a workshop or presentation from scratch through guided conversation. Produces a structured workshop.md with narrative arc, timing, speaker notes, and facilitation design.
 ---
 
 # Workshop Plan
 
-Design a complete workshop through guided conversation. One question at a time, building from audience to finished facilitation document.
+Design a complete workshop or presentation through guided conversation. One question at a time, building from audience to finished facilitation document.
 
 ## When to use
 
-- Planning a new workshop, training session, or team presentation
+- Planning a new workshop, presentation, or team session
 - Restructuring an existing workshop
 - Creating a facilitation-ready document from rough notes or ideas
 
@@ -19,82 +19,97 @@ A `workshop.md` file following the standard structure convention (see template b
 
 ## Process
 
+### Phase 0: Format & Interaction Level
+
+Ask this first — it determines the shape of everything else.
+
+1. **Format:** "Is this a presentation (mostly one-way, you talk), an interactive workshop (exercises, polls, Q&A), or a mix?"
+2. **Interaction level:** Based on the answer, set expectations:
+   - **Presentation:** No polls, no structured Q&A. Focus on narrative arc and story. Cheatsheet will be speaking notes.
+   - **Interactive:** Polls, exercises, Q&A. Focus on interaction design and facilitation cues.
+   - **Mix:** Presentation core with targeted interaction points.
+
+This determines whether Phases 3-4 (Interaction Design, Facilitation Cues) are needed or skipped.
+
 ### Phase 1: Audience & Goals
 
-Ask these one at a time. Do not batch questions.
+Ask one at a time. Do not batch.
 
-1. **Topic:** "What's this workshop about? One sentence."
-2. **Audience:** "Who's attending? How many? What's their experience level with this topic?"
-3. **Format:** "Remote or in-person? Duration? Is it standalone or part of a larger session?"
-4. **Success:** "After this workshop, what should people know, feel, or do differently?"
-5. **Series context:** "Is this part of a series? If so, what comes before/after?"
+1. **Topic:** "What's this about? One sentence."
+2. **Audience:** "Who's attending? How many? What's their experience level?"
+3. **Audience segments:** "Is everyone at the same level, or are there distinct groups? For example, beginners and power users, or people from different teams?" — if segments exist, note them. The narrative should speak to all groups.
+4. **Duration:** "How long? Fixed slot or flexible?"
+5. **Success:** "After this, what should people know, feel, or do differently?"
+6. **Series context:** "Is this part of a series? What comes before/after?"
 
-### Phase 2: Content Architecture
+### Phase 2: Narrative Architecture
 
-Design the block structure. Apply these constraints:
+**Do NOT think in topics. Think in story beats.**
 
-- **Energy arc:** Open with engagement (poll/question), deepen with content, interact in the middle, close with action
-- **Max block length:** 15 minutes. Anything longer must be split.
-- **Interaction frequency:** At least one interactive element every 15 minutes (poll, Q&A, demo, exercise)
-- **Block types:** Opening, Content, Demo, Interaction (poll/Q&A/exercise), Close
-- **Buffer:** Always leave 5-10% of total time as flex/buffer
+The default structure is a narrative arc:
+
+```
+Setup → Problem/Gap → Proof → Reveal/Fix → Depth → Wow moment → Action
+```
+
+Not every beat is needed. Adapt to the content. But the principle is: **tell a story, not a topic list**.
 
 Ask the user:
-1. "What are the 3-5 key things you want to cover?" — then propose a block structure with timing
-2. "Which blocks should be interactive vs presentation?" — adjust based on answer
-3. "Any demos or live examples you want to include?" — design demo blocks with scripts
+1. "What are the 3-5 key things you want to cover?" — then propose a **narrative arc** with story beats and timing, not just a block list
+2. "What's the 'wow moment' — the thing people will remember?" — design the arc to build toward it
+3. "Are there any demos or live examples?" — design them as payoff moments in the story
 
-### Phase 3: Interaction Design
+**Constraints:**
+- **Max block length:** 15 minutes. Anything longer must be split.
+- **Narrative coherence:** Each slide/section should connect to the next with a clear "why now?" If you can't explain why section B follows section A, reorder.
+- **Audience segments:** If multiple groups exist, design moments where each group sees themselves (e.g., a "two ways" comparison slide)
+- **Buffer:** Leave 5-10% of total time as flex
 
-For each interactive element, design the full specification:
+For **interactive** workshops, also apply:
+- At least one interactive element every 15 minutes (poll, Q&A, exercise)
+- Alternate between passive and active blocks
 
-**Polls:**
-- Exact question text
-- Answer options (for multiple choice) or format (word cloud, scale)
-- How to read and respond to results ("If mostly X, say Y")
-- When in the timeline it runs
+### Phase 3: Interaction Design (interactive/mix only)
 
-**Q&A:**
-- Format (live questions, upvoted Q&A tool, chat)
-- How many questions to take
-- Prepared fallback questions (always have 2)
+Skip this phase for presentations.
 
-**Demos:**
-- What file/tool/screen to show
-- Step-by-step script
-- What to narrate during each step
-- Fallback plan if it fails
+For each interactive element:
 
-### Phase 4: Facilitation Cues
+**Polls:** Exact question text, answer options, how to read results, when it runs
+**Q&A:** Format, how many questions, prepared fallback questions (always 2)
+**Demos:** What to show, step-by-step script, narration cues, fallback plan
 
-For each block, write:
-- **Opening line:** The exact first sentence to say
-- **Transition to next block:** The bridge phrase
-- **"If X happens" notes:** What to do if things go wrong, audience is quiet, time runs over
+### Phase 4: Facilitation Cues (interactive/mix only)
+
+Skip for presentations. For presentations, the cheatsheet handles speaking notes.
+
+For each block:
+- **Opening line:** The exact first sentence
+- **Transition:** The bridge phrase to the next block
+- **"If X happens":** What to do if things go wrong
 
 ### Phase 5: Pre/Post Comms
 
-- **Pre-workshop message:** Copy-paste ready Slack/email message to send before the workshop
-- **Setup checklist:** What facilitators need to prepare (tools, accounts, branches, recordings)
-- **Post-workshop follow-up:** What to share after (recording, links, next steps)
+- **Pre-workshop message:** Copy-paste ready (or note "not needed" for low-key sessions)
+- **Post-workshop follow-up:** What to share after
 - **Feedback mechanism:** How to measure success
 
 ### Phase 6: Output
 
-Write the complete `workshop.md` following the structure template below. Save it to the workshop directory specified by the user.
+Write the complete `workshop.md`. Before writing, confirm: "Here's the narrative arc — [show beat list with timing and slide mapping]. Ready to write?"
 
-Before writing, confirm the full structure with the user: "Here's the workshop at a glance — [show block list with timing]. Ready to write?"
+**Adapt the template to the format:**
+- Presentations: include Narrative Arc section, skip Risk Mitigation / Workshop Branch / Backup Recordings unless there are demos
+- Interactive workshops: include all sections
+- Keep it lean — don't add sections that aren't needed
 
 ### Phase 7: Initialize CLAUDE.md & AGENTS.md
 
 **CLAUDE.md** (repo root):
-- If not present, create with: project description, available skills reference, active workshop info, and file map
-- If it exists, update the "Active Workshop" section with the new workshop's details
-- This ensures `/workshop-slides` and `/workshop-cheatsheet` can read context when invoked later
+- If not present, create with: project description, available skills, active workshop info, file map
+- If it exists, update the "Active Workshop" section
 
-**AGENTS.md** (workshop directory, same level as `workshop.md`):
-Create an `AGENTS.md` listing available workshop skills so any Claude Code session in that directory knows what tools are available:
-
+**AGENTS.md** (workshop directory):
 ```markdown
 # AGENTS.md
 
@@ -104,104 +119,80 @@ Create an `AGENTS.md` listing available workshop skills so any Claude Code sessi
 |-------|---------|---------|
 | workshop-slides | `/workshop-slides` | Generate slide deck from workshop.md |
 | workshop-cheatsheet | `/workshop-cheatsheet` | Generate facilitator cheatsheet from workshop.md |
-| workshop-toggle-controls | `/workshop-toggle-controls` | Toggle all keyboard controls on/off for presenting |
+| workshop-toggle-controls | `/workshop-toggle-controls` | Toggle keyboard controls on/off for presenting |
 
 ## Presenting
 
-Before presenting, run `/workshop-toggle-controls` to disable keyboard intercepts (arrows, Space, Home/End, F) so the browser handles them normally. Re-run after presenting to restore controls.
+Before presenting, run `/workshop-toggle-controls` to disable keyboard intercepts so the browser handles them normally. Re-run after to restore.
 ```
 
 ## Workshop.md Structure Template
 
-The output MUST follow this structure exactly. This enables `/workshop-slides` and `/workshop-cheatsheet` to parse it.
+Adapt based on format. Sections marked (conditional) are only included when relevant.
 
 ```markdown
 # Workshop Title
 
 **Date:** [date or TBD]
 **Duration:** [total time]
-**Format:** [Remote/In-person], [tools used]
+**Format:** [Remote/In-person], [presentation/interactive/mix]
 **Audience:** [count] [role], [experience level]
-**Facilitators:** [names or TBD]
+**Presenters:** [names]
 
 ---
 
 ## Purpose
 
-[1-2 sentences on what this workshop achieves]
+[1-2 sentences]
 
 [Optional: comparison table if part of a series]
 
 ---
 
-## Pre-Workshop Actions
+## Narrative Arc
 
-### [Timing] ([description])
-
-**[Channel] message to send** (copy-paste ready):
+[Story structure mapping beats to slides and timing]
 
 ```
-[Message text]
+Beat           →  Slides    →  Duration  →  Presenter
+Setup             S1-S2        ~2 min       [name]
+Problem           S3-S4        ~3 min       [name]
+...
 ```
-
-### Before the workshop
-
-#### [Tool] Setup
-- [ ] [Setup step]
-
-#### Other Prep
-- [ ] [Prep step]
 
 ---
 
 ## Agenda ([total time])
 
 ```
-[Start] Block N - [Name]    [Duration]
+[Start]  Block N — [Name]    [Duration]  ([Presenter])
 ```
 
 ---
 
 ## Block N: [Name] ([duration])
 
-**Who:** [facilitator]
+**Who:** [presenter]
 **Format:** [presentation/demo/interactive]
+**Slides:** [slide numbers]
 
 ### Script
 
-[Numbered steps with exact words to say in quotes]
-[Poll specifications in code blocks]
-[Demo steps with narration cues]
+[Content organized by slide, with speaking notes as natural sentences]
 
-> **Transition:** "[Bridge phrase to next block]"
+> **Transition:** "[bridge phrase]"
 
 ---
 
-## Workshop Branch (Sandbox)
+## Pre-Workshop (conditional)
 
-[If demos exist: branch setup instructions and verification checklist]
-
----
-
-## Backup Recordings
-
-[If demos exist: list of recordings to prepare]
+[Copy-paste message or "not needed"]
 
 ---
 
-## Facilitator Assignments
+## Workshop Branch (conditional — only if live demos)
 
-| Block | Facilitator | Backup |
-|-------|-------------|--------|
-| [Block name] | TBD | TBD |
-
----
-
-## Risk Mitigation
-
-| Risk | Mitigation |
-|------|-----------|
-| [Risk] | [What to do] |
+[Branch setup and verification checklist]
 
 ---
 
@@ -214,9 +205,9 @@ The output MUST follow this structure exactly. This enables `/workshop-slides` a
 
 ## Design Principles
 
-- **One question at a time.** Never batch questions. Wait for the answer before asking the next.
-- **Be opinionated.** Propose block structures, don't ask "what blocks do you want?" Say "I'd suggest 5 blocks like this — what do you think?"
-- **Energy arc matters.** Don't put all content blocks in a row. Alternate between passive and active.
-- **Write for glanceability.** Speaker notes should be scannable during a live session, not dense paragraphs.
-- **Always have fallbacks.** Every demo needs a backup. Every Q&A needs prepared questions. Every tool needs a plan B.
-- **Time is sacred.** Every block has a duration. The total must add up. Include buffer.
+- **One question at a time.** Never batch questions.
+- **Be opinionated.** Propose narrative arcs, don't ask "what structure do you want?"
+- **Story over topics.** "Why does this section follow that one?" must have an answer.
+- **Audience segments matter.** If there are different groups, design for all of them.
+- **Adapt the template.** Don't include Risk Mitigation tables for a casual 20-minute presentation. Don't skip interaction design for a 2-hour hands-on workshop.
+- **Time is sacred.** Every block has a duration. The total must add up.
