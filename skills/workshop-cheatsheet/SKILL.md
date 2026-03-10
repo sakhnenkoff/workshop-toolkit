@@ -33,7 +33,12 @@ Read the `workshop.md` and extract:
 
 ### Step 1.5: Read context
 
-Check for a `CLAUDE.md` in the repo root. Use design system info (colors, fonts) to style the cheatsheet consistently with the slides — same font families and accent colors, but light/utility-focused design.
+Style the cheatsheet consistently with the slides. Check these in order:
+1. **CLAUDE.md** in the repo root — if it has design system info, use it
+2. **Saved themes** in `~/Developer/workshop-toolkit/themes/` — if the user specifies a theme name, load it
+3. **Slides file** — if `slides.html` exists in the same directory, extract font and color choices from it
+
+The cheatsheet should feel like it belongs to the same visual family as the slides — same fonts and accent colors — but with a light, utility-focused design. Theme files include a "Cheatsheet Styling" section with specific guidance.
 
 ### Step 2: Generate
 

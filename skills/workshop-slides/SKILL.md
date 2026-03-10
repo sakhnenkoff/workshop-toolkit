@@ -39,15 +39,17 @@ Read the `workshop.md` and extract **participant-facing content only**:
 
 ### Phase 2: Style Selection
 
-**Check for existing design context first:**
-- If a `CLAUDE.md` exists with design system info (colors, fonts, tokens), use those as the starting point
-- If the user specifies a brand (e.g., "use Warp/Vend tokens"), fetch tokens from the relevant source
-- If neither, use the curated presets below
+**Resolution order — check these in sequence:**
 
-**Brand preset flow:**
-1. Look up the brand's color tokens, typography, and component conventions
-2. Generate a single preview using the brand's actual tokens
-3. Ask: "I've matched your brand tokens. Want to adjust anything?"
+1. **CLAUDE.md** — if it exists in the repo root with design system info, use that theme
+2. **Saved themes** — check `~/Developer/workshop-toolkit/themes/` for reusable theme files. If the user says "use Vend theme" or "same theme as last time", load the matching `.md` file from this directory
+3. **User-specified brand** — if they name a design system (e.g., "use Warp/Vend tokens"), fetch tokens and create the theme
+4. **Generic presets** — if none of the above, use the curated presets below
+
+**Saved theme flow** (preferred for repeat workshops):
+1. Read the theme file (e.g., `themes/vend.md`) — it has all CSS variables, fonts, component patterns, and slide-specific conventions
+2. Generate a single preview using the saved theme
+3. Ask: "Using the [theme name] theme. Want to adjust anything?"
 
 **Generic preset flow:**
 Generate 3 single-slide HTML previews. Open all three and ask the user to pick.
@@ -60,6 +62,8 @@ Generate 3 single-slide HTML previews. Open all three and ask the user to pick.
 4. **Warm Editorial** — Cream background, serif headlines, warm accent, generous whitespace.
 
 Each preview must use the actual workshop title, not placeholder text.
+
+**Saving new themes:** If the user creates a new theme (via brand tokens or customization), offer to save it to `~/Developer/workshop-toolkit/themes/[name].md` for reuse.
 
 ### Phase 3: Generate
 
